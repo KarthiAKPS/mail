@@ -51,6 +51,7 @@ function load_mailbox(mailbox) {
   // Show the mailbox and hide other views
   document.querySelector('#emails-view').style.display = 'block';
   document.querySelector('#compose-view').style.display = 'none';
+  document.querySelector('#view-mail').style.display = 'none';
 
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
@@ -62,26 +63,44 @@ function load_mailbox(mailbox) {
       console.log(emails);
       emails.forEach(email => {
         const element = document.createElement('div');
-        let sender = document.createElement('div');
+        element.className = email.read ? 'read' : 'unread';
+        if (element.className == 'read'){
+          element.style.backgroundColor = 'grey';
+        }
         if (mailbox === 'inbox'){
-          sender.innerHTML = `From : <h4>${email.sender}</h4>`;
-          element.append(sender);
+          element.innerHTML = `From : <h4>${email.sender}</h4>
+          <h2>Subject : ${email.subject}</h2>
+          <p>${email.timestamp}</p>`;
         }
-        let receiver = document.createElement('div');
         if (mailbox === 'sent'){
-          receiver.innerHTML = `To : <h4>${email.recipients}</h4>`;
-          element.append(receiver)
+          receiver.innerHTML = `To : <h4>${email.recipients}</h4>
+          <h2>Subject : ${email.subject}</h2>
+          <p>${email.timestamp}</p>`;
         }
-        let sub = document.createElement('div');
-        sub.innerHTML = `<h2>Subject : ${email.subject}</h2>`;
-        let time = document.createElement('div');
-        time.innerHTML = `<p>${email.timestamp}</p>`;
-        element.append(sub);
-        element.append(time);
-        element.addEventListener('click', (email) => {
-            console.log('This element has been clicked!')
+        element.addEventListener('click', function(){
+          document.querySelector('#view-mail').style.display = 'block';
+          read_mail(email.id);
+          console.log('This element has been clicked!');
           });
         document.querySelector('#emails-view').append(element);
         });
     });
+  }
+function read_mail(id){
+  fetch(`/emails/${id}`)
+  .then(response => response.json())
+  .then(email => {
+    // Print email
+    console.log(email);
+
+    // ... do something else with email ...
+    let e = document.querySelector('#view-mail');
+    const f = document.querySelector('#emails-view');
+    const windheight = window.innerHeight;
+    f.style.height = windheight + 'px';
+    e.innerHTML = `<h4>From : ${email.sender}</h4>
+                    <h2>Subject : ${email.subject}</h2>
+                    <p><b>${email.timestamp}</b></p>
+                    <p>${email.body}</p>`
+  });
   }

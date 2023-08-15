@@ -1,3 +1,36 @@
 textarea {
     min-height: 400px;
 }
+
+.read{
+    background-color: gray;
+    border : 1px solid lightslategray;
+    padding: 10px;
+}
+
+h3{
+    padding: 5px;
+}
+
+.unread{
+    background-color:white;
+    border : 1px solid lightgrey;
+    padding: 10px;
+}
+
+#emails-view{
+    width: 50%;
+    overflow-y : scroll;
+    background-color: lightgrey;
+}
+
+#view-mail{
+    position : absolute;
+    top : 0;
+    left : 50%;
+    width : 50%;
+    height : 100vh;
+    transform: translate(5%, 20%);
+}
+
+
