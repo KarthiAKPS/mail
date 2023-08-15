@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelector('#sent').addEventListener('click', () => load_mailbox('sent'));
   document.querySelector('#archived').addEventListener('click', () => load_mailbox('archive'));
   document.querySelector('#compose').addEventListener('click', compose_email);
-  document.querySelector('#compose-form').addEventListener('submit', () => send_mail);
+  document.querySelector('#compose-form').addEventListener('submit', send_mail);
 
   // By default, load the inbox
   load_mailbox('inbox');
@@ -24,7 +24,9 @@ function compose_email() {
 
 }
 
-function send_mail(){
+function send_mail(event){
+  event.preventDefault();
+  console.log('entered send')
   const recipients = document.querySelector('#compose-recipients').value;
   const subject = document.querySelector('#compose-subject').value;
   const body = document.querySelector('#compose-body').value;
@@ -53,8 +55,7 @@ function load_mailbox(mailbox) {
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
 
-  if (mailbox === 'inbox'){
-  fetch('/emails/inbox')
+  fetch(`/emails/${mailbox}`)
   .then(response => response.json())
   .then(emails => {
       // Print emails
@@ -62,12 +63,19 @@ function load_mailbox(mailbox) {
       emails.forEach(email => {
         const element = document.createElement('div');
         let sender = document.createElement('div');
-        sender.innerHTML = `${email.sender}`;
+        if (mailbox === 'inbox'){
+          sender.innerHTML = `From : <h4>${email.sender}</h4>`;
+          element.append(sender);
+        }
+        let receiver = document.createElement('div');
+        if (mailbox === 'sent'){
+          receiver.innerHTML = `To : <h4>${email.recipients}</h4>`;
+          element.append(receiver)
+        }
         let sub = document.createElement('div');
-        sub.innerHTML = `${email.subject}`;
+        sub.innerHTML = `<h2>Subject : ${email.subject}</h2>`;
         let time = document.createElement('div');
-        time.innerHTML = `${email.timestamp}`;
-        element.append(sender);
+        time.innerHTML = `<p>${email.timestamp}</p>`;
         element.append(sub);
         element.append(time);
         element.addEventListener('click', (email) => {
@@ -77,4 +85,3 @@ function load_mailbox(mailbox) {
         });
     });
   }
-}
