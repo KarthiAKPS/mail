@@ -3,34 +3,83 @@ textarea {
 }
 
 .read{
-    background-color: gray;
+    background-color: lightgray;
     border : 1px solid lightslategray;
     padding: 10px;
 }
 
+#sub{
+    border: 1px solid gray;
+    padding: 10px;
+    background-color:rgb(162, 206, 245);
+    color: rgb(66, 99, 220)
+}
+
+#context{
+    border: 1px solid gray;
+    height: 65vh;
+    padding: 10px;
+    overflow-y : scroll;
+    background-color:aliceblue;
+}
+
 h3{
     padding: 5px;
+    color: rgb(51, 108, 230);
+    background-color: aliceblue;
 }
 
 .unread{
     background-color:white;
-    border : 1px solid lightgrey;
+    border : 1px solid lightslategray;
     padding: 10px;
 }
 
+@keyframes view {
+    0% {
+        width: 100%;
+    }
+    100%{
+        width:50%;
+    }
+}
+
 #emails-view{
-    width: 50%;
+    margin : 0px;
     overflow-y : scroll;
-    background-color: lightgrey;
+    background-color: aliceblue;
+    animation: view 2s ease-in-out paused;
+}
+
+@keyframes mail {
+    0%{
+        opacity: 0;
+        left: 100%;
+    }
+    50%{
+        opacity: 25%;
+    }
+    75%{
+        opacity: 50%;
+    }
+    100%{
+        opacity: 1;
+        left: 50%;
+    }
 }
 
 #view-mail{
+    margin-right: 20px;
     position : absolute;
     top : 0;
     left : 50%;
-    width : 50%;
+    width : 42%;
     height : 100vh;
-    transform: translate(5%, 20%);
+    transform: translate(5%, 17%);
+    animation-name: mail;
+    animation-duration: 2s;
+    animation-timing-function: ease-in-out;
+    animation-play-state: paused;
 }
 
 
